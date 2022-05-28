@@ -6,8 +6,25 @@ import { Task, TaskStatus } from './tasks.model';
 export class TasksService {
   private tasks: Task[] = [];
 
-  getAllTasks(): Task[] {
+  getTasks(): Task[] {
     return this.tasks;
+  }
+
+  getTasksWithFiltes(search: string, status: string): Task[] {
+    let tasks = this.getTasks();
+    // And search 
+    if (search) {
+      tasks = tasks?.filter((task) => {
+        return task.description.includes(search) 
+          || task.title.includes(search);
+      });
+    }
+    if (status) {
+      tasks = tasks?.filter((task) => {
+        return task.status === status;
+      });
+    }
+    return tasks;
   }
 
   getTask(id: string): Task {

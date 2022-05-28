@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Task, TaskStatus } from './tasks.model';
 import { TasksService } from './tasks.service';
@@ -15,8 +16,14 @@ export class TasksController {
   constructor(private taskService: TasksService) {}
 
   @Get()
-  getAllTasks(): Task[] {
-    return this.taskService.getAllTasks();
+  getTasks(
+    @Query('search') search: string,
+    @Query('status') status: TaskStatus,
+  ): Task[] {
+    if (search || status) {
+      return this.taskService.getTasksWithFiltes(search, status);
+    }
+    return this.taskService.getTasks();
   }
 
   @Get('/:id')
