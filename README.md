@@ -1,4 +1,4 @@
-# NestJS Task Management Application - APIs
+# NestJS Task Management Application - REST APIs
 
 This is a simple NestJS task management application to perform CRUD operations.
 
@@ -18,7 +18,7 @@ $ npm run start
 $ npm run start:dev
 
 ```
-## The following table shows the overview of the Rest APIs
+## The following table shows the overview of the REST APIs
 
 ```
 | Methods  | Urls | Actions |
