@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-import { Task, TaskStatus } from './tasks.model';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { Task, TaskStatus } from './task.model';
 
 @Injectable()
 export class TasksService {
@@ -10,7 +12,7 @@ export class TasksService {
     return this.tasks;
   }
 
-  getTasksWithFiltes(search: string, status: string): Task[] {
+  getTasksWithFilters({ search, status }: GetTasksFilterDto): Task[] {
     let tasks = this.getTasks();
     // And search 
     if (search) {
@@ -27,11 +29,15 @@ export class TasksService {
     return tasks;
   }
 
-  getTask(id: string): Task {
-    return this.tasks.find((task) => task.id === id);
+  getTaskById(id: string): Task {
+    const found = this.tasks.find((task) => task.id === id);
+    if (!found) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
+    return found;
   }
 
-  createTask(title: string, description: string, status: TaskStatus): Task {
+  createTask({ title, description, status }: CreateTaskDto): Task {
     const task = {
       id: uuid(),
       title,
@@ -48,20 +54,17 @@ export class TasksService {
     description: string,
     status: TaskStatus,
   ): Task {
-    const indexOfObject = this.tasks.findIndex((task) => task.id === id);
-    if (title) {
-      this.tasks[indexOfObject].title = title;
-    }
-    if (description) {
-      this.tasks[indexOfObject].description = description;
-    }
-    if (status) {
-      this.tasks[indexOfObject].status = status;
-    }
-    return this.tasks[indexOfObject];
+    const task = this.getTaskById(id);
+    
+    if (title) task.title = title;
+    if (description) task.description = description;
+    if (status) task.status = status;
+    
+    return task;
   }
 
   deleteTask(id: string) {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+    const found = this.getTaskById(id);
+    this.tasks = this.tasks.filter((task) => task.id !== found.id);
   }
 }
