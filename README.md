@@ -25,7 +25,7 @@ $ npm run start:dev
 | ------------- | ------------- |
 | POST | /api/tasks | Create a task |
 | GET | /api/tasks | Get all tasks |
-| GET | /api/tasks?status=DONE&search=any string | Get specific tasks by searching |
+| GET | /api/tasks?status=DONE&search=any string | Filter tasks by using status and either title or description |
 | GET | /api/tasks/:id | Get a task |
 | PUT | /api/tasks/:id | Update a task |
 | DELETE | /api/tasks/:id | Delete a task |
