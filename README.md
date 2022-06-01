@@ -10,6 +10,8 @@ $ npm install
 
 ## Running the app
 
+You can run the App two ways either the following way or `docker-compose up`. If you want the following way then you have to have installed `Postgres` database in your computer and database name would be `mydb` or you have to configure it manually in `src/config/typeorm.config.ts` for whatever database you prefer.
+
 ```bash
 ## development
 $ npm run start
@@ -18,7 +20,7 @@ $ npm run start
 $ npm run start:dev
 
 ```
-## The following table shows the overview of the REST APIs
+## The following table shows the overview of the Rest APIs
 
 ```
 | Methods  | Urls | Actions |

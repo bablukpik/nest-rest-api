@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -13,7 +14,8 @@ import {
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
-import { Task, TaskStatus } from './task.model';
+import { TaskEntity } from './tasks.entity';
+import { TaskStatus } from './tasks.interface';
 import { TasksService } from './tasks.service';
 
 @Controller('api/tasks')
@@ -21,36 +23,33 @@ export class TasksController {
   constructor(private taskService: TasksService) {}
 
   @Get()
-  getTasks(@Query(ValidationPipe) getTasksFilterDto: GetTasksFilterDto): Task[] {
-    if (Object.keys(getTasksFilterDto).length) {
-      return this.taskService.getTasksWithFilters(getTasksFilterDto);
-    }
-    return this.taskService.getTasks();
+  async getTasks(@Query(ValidationPipe) getTasksFilterDto: GetTasksFilterDto): Promise<TaskEntity[]> {
+    return this.taskService.getTasks(getTasksFilterDto);
   }
 
   @Get('/:id')
-  getTask(@Param('id') id: string): Task {
+  async getTaskById(@Param('id', ParseIntPipe) id: number): Promise<TaskEntity> {
     return this.taskService.getTaskById(id);
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  createTask( @Body() createTaskDto: CreateTaskDto ): Task {
+  createTask( @Body() createTaskDto: CreateTaskDto ): Promise<TaskEntity> {
     return this.taskService.createTask(createTaskDto);
   }
 
   @Put('/:id')
-  updteTask(
-    @Param('id') id: string,
+  async updteTask(
+    @Param('id', ParseIntPipe) id: number,
     @Body('title') title: string,
     @Body('description') description: string,
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
-  ): Task {
+  ): Promise<TaskEntity> {
     return this.taskService.updateTask(id, title, description, status);
   }
 
   @Delete('/:id')
-  deleteTask(@Param('id') id: string) {
+  async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.taskService.deleteTask(id);
   }
 }
