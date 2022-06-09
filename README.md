@@ -25,6 +25,8 @@ $ npm run start:dev
 ```
 | Methods  | Urls | Actions |
 | ------------- | ------------- |
+| POST | /auth/signup | Create a user |
+| POST | /auth/signin | Get access tokens |
 | POST | /api/tasks | Create a task |
 | GET | /api/tasks | Get all tasks |
 | GET | /api/tasks?status=DONE&search=any string | Filter tasks by using status and either title or description |
